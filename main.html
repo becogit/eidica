@@ -1,929 +1,354 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Eidica - Eidetic Memory. Never forget your photos, remember them with notes.">
-    <title>Eidica - Your Eidetic Memory</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #1e40ff;
-            --secondary: #00d9ff;
-            --purple: #9d4edd;
-            --dark: #0a0a0f;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--dark);
-            color: #fff;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        /* Animated 3D Background */
-        .bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-        }
-
-        .bg-gradient-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(ellipse at top, rgba(30, 64, 255, 0.15), transparent 70%),
-                        radial-gradient(ellipse at bottom right, rgba(157, 78, 221, 0.15), transparent 70%),
-                        radial-gradient(ellipse at bottom left, rgba(0, 217, 255, 0.1), transparent 70%);
-            pointer-events: none;
-        }
-
-        /* Glassmorphism Nav */
-        nav {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 100px;
-            padding: 12px 30px;
-            display: flex;
-            gap: 40px;
-            align-items: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            animation: slideDown 0.8s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        .nav-logo {
-            font-size: 1.3rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #fff;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            padding: 120px 20px 60px;
-        }
-
-        .hero-content {
-            text-align: center;
-            max-width: 900px;
-            z-index: 10;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: rgba(0, 217, 255, 0.1);
-            border: 1px solid rgba(0, 217, 255, 0.3);
-            border-radius: 50px;
-            color: var(--secondary);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 7vw, 6rem);
-            font-weight: 900;
-            line-height: 1;
-            margin-bottom: 15px;
-            letter-spacing: -3px;
-            animation: fadeInUp 0.8s ease 0.4s both;
-        }
-
-        .hero h1 .gradient-text {
-            background: linear-gradient(135deg, #fff 0%, var(--secondary) 50%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: gradientFlow 3s linear infinite, fadeInUp 0.8s ease 0.4s both;
-        }
-
-        @keyframes gradientFlow {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        .hero .subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 30px;
-            font-weight: 300;
-            animation: fadeInUp 0.8s ease 0.6s both;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease 0.8s both;
-        }
-
-        .btn-primary {
-            padding: 18px 45px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            color: #fff;
-            box-shadow: 0 10px 40px rgba(30, 64, 255, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-primary:hover::before {
-            opacity: 1;
-        }
-
-        .btn-primary span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 50px rgba(30, 64, 255, 0.5);
-        }
-
-        .btn-secondary {
-            padding: 18px 45px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--secondary);
-            background: rgba(0, 217, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Features Section */
-        .features {
-            padding: 100px 20px;
-            position: relative;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-title h2 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 900;
-            margin-bottom: 15px;
-            letter-spacing: -2px;
-        }
-
-        .section-title p {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .features-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 30px;
-            padding: 50px 40px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
-        }
-
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(0, 217, 255, 0.2);
-            box-shadow: 0 30px 60px rgba(0, 217, 255, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 3.5rem;
-            margin-bottom: 30px;
-            display: block;
-            filter: drop-shadow(0 5px 15px rgba(0, 217, 255, 0.3));
-        }
-
-        .feature-card h3 {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .feature-card p {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
-
-        /* Screenshot Carousel with flat rounded images */
-        .showcase {
-            padding: 100px 20px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .showcase-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            height: 700px;
-        }
-
-        .screenshots-carousel {
-            position: relative;
-            height: 100%;
-            perspective: 2000px;
-        }
-
-        .screenshot-track {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: 600px;
-            transform-style: preserve-3d;
-            animation: rotate3d 40s linear infinite;
-        }
-
-        @keyframes rotate3d {
-            from {
-                transform: translate(-50%, -50%) rotateY(0deg);
-            }
-            to {
-                transform: translate(-50%, -50%) rotateY(360deg);
-            }
-        }
-
-        .screenshot-item-3d {
-            position: absolute;
-            width: 260px;
-            height: 563px;
-            left: 50%;
-            top: 50%;
-            transform-origin: center;
-            transform-style: preserve-3d;
-            border-radius: 12px;
-            overflow: visible;
-            transition: all 0.3s ease;
-        }
-
-        .screenshot-item-3d img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.7);
-            backface-visibility: hidden;
-        }
-
-        .screenshot-item-3d:nth-child(1) {
-            transform: translate(-50%, -50%) rotateY(0deg) translateZ(500px);
-        }
-
-        .screenshot-item-3d:nth-child(2) {
-            transform: translate(-50%, -50%) rotateY(40deg) translateZ(500px);
-        }
-
-        .screenshot-item-3d:nth-child(3) {
-            transform: translate(-50%, -50%) rotateY(80deg) translateZ(500px);
-        }
-
-        .screenshot-item-3d:nth-child(4) {
-            transform: translate(-50%, -50%) rotateY(120deg) translateZ(500px);
-        }
-
-        .screenshot-item-3d:nth-child(5) {
-            transform: translate(-50%, -50%) rotateY(160deg) translateZ(500px);
-        }
-
-        .screenshot-item-3d:nth-child(6) {
-            transform: translate(-50%, -50%) rotateY(200deg) translateZ(500px);
-        }
-
-        .screenshot-item-3d:nth-child(7) {
-            transform: translate(-50%, -50%) rotateY(240deg) translateZ(500px);
-        }
-
-        .screenshot-item-3d:nth-child(8) {
-            transform: translate(-50%, -50%) rotateY(280deg) translateZ(500px);
-        }
-
-        .screenshot-item-3d:nth-child(9) {
-            transform: translate(-50%, -50%) rotateY(320deg) translateZ(500px);
-        }
-
-        /* Pricing */
-        .pricing {
-            padding: 100px 20px;
-        }
-
-        .pricing-grid {
-            max-width: 1000px;
-            margin: 80px auto 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .pricing-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.05);
-            border-radius: 40px;
-            padding: 60px 40px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .pricing-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(30, 64, 255, 0.1), rgba(157, 78, 221, 0.1));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: rgba(0, 217, 255, 0.3);
-            box-shadow: 0 30px 80px rgba(0, 217, 255, 0.3);
-        }
-
-        .pricing-card:hover::before {
-            opacity: 1;
-        }
-
-        .pricing-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: linear-gradient(135deg, var(--primary), var(--purple));
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-        }
-
-        .pricing-card h3 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .pricing-price {
-            font-size: 4rem;
-            font-weight: 900;
-            margin-bottom: 10px;
-            letter-spacing: -2px;
-        }
-
-        .pricing-period {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 40px;
-        }
-
-        .pricing-features li {
-            padding: 12px 0;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.05rem;
-        }
-
-        .pricing-features li::before {
-            content: '✓';
-            color: var(--secondary);
-            font-weight: 900;
-            margin-right: 15px;
-            font-size: 1.2rem;
-        }
-
-        /* Footer */
-        footer {
-            padding: 80px 20px 40px;
-            text-align: center;
-            position: relative;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--secondary);
-        }
-
-        .footer-email {
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-        }
-
-        .footer-email a {
-            color: var(--secondary);
-            text-decoration: none;
-        }
-
-        .copyright {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.9rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 968px) {
-            nav {
-                padding: 12px 20px;
-                gap: 20px;
-            }
-
-            .nav-links {
-                gap: 20px;
-            }
-
-            .showcase-container {
-                height: 700px;
-            }
-
-            .screenshot-track {
-                width: 220px;
-                height: 480px;
-            }
-
-            .screenshot-item-3d {
-                width: 220px;
-                height: 476px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            nav {
-                width: calc(100% - 40px);
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px 20px;
-            }
-
-            .hero-cta {
-                flex-direction: column;
-            }
-
-            .btn-primary,
-            .btn-secondary {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .showcase-container {
-                height: 600px;
-            }
-        }
-
-        /* Particle Effect */
-        .particle {
-            position: fixed;
-            width: 3px;
-            height: 3px;
-            background: var(--secondary);
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            animation: particleFly 3s ease-out;
-        }
-
-        @keyframes particleFly {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(0);
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Eidica - Eidetic Memory. Never forget your photos, remember them with notes.">
+  <title>Eidica - Your Eidetic Memory</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #1e40ff;
+      --secondary: #00d9ff;
+      --purple: #9d4edd;
+      --dark: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--dark);
+      color: #fff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .bg-canvas {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+    }
+    .bg-gradient-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: radial-gradient(ellipse at top, rgba(30, 64, 255, 0.15), transparent 70%),
+                  radial-gradient(ellipse at bottom right, rgba(157, 78, 221, 0.15), transparent 70%),
+                  radial-gradient(ellipse at bottom left, rgba(0, 217, 255, 0.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    nav {
+      position: fixed;
+      top: 20px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 12px 30px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3),
+                  inset 0 1px 0 rgba(255,255,255,0.1);
+      animation: slideDown 0.8s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .nav-logo {
+      font-size: 1.3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -5px; left: 0;
+      width: 0; height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { width: 100%; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 100px 15px 60px;
+    }
+    .hero-content { text-align: center; max-width: 900px; z-index: 10; }
+    .hero-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: rgba(0,217,255,0.1);
+      border: 1px solid rgba(0,217,255,0.3);
+      border-radius: 50px;
+      color: var(--secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 6rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 15px;
+      letter-spacing: -3px;
+    }
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, #fff 0%, var(--secondary) 50%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: gradientFlow 3s linear infinite;
+    }
+    @keyframes gradientFlow { 0%{background-position:0% center;}100%{background-position:200% center;} }
+
+    .hero .subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      padding: 18px 45px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      color: #fff;
+      box-shadow: 0 10px 40px rgba(30, 64, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 50px rgba(30, 64, 255, 0.5); }
+    .btn-secondary {
+      padding: 18px 45px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 50px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover {
+      border-color: var(--secondary);
+      background: rgba(0,217,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    .features { padding: 100px 20px; position: relative; }
+    .section-title { text-align: center; margin-bottom: 60px; }
+    .section-title h2 { font-size: clamp(2.5rem,5vw,4rem); font-weight: 900; margin-bottom: 15px; }
+    .section-title p { font-size: 1.2rem; color: rgba(255,255,255,0.6); }
+
+    .features-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 30px;
+      padding: 50px 40px;
+      transition: all 0.4s;
+      text-align: center;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(0,217,255,0.2);
+      box-shadow: 0 30px 60px rgba(0,217,255,0.2);
+    }
+    .feature-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+
+    .pricing {
+      padding: 100px 20px;
+    }
+    .pricing-grid {
+      max-width: 1000px;
+      margin: 80px auto 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+    .pricing-card {
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255,255,255,0.05);
+      border-radius: 40px;
+      padding: 60px 40px;
+      transition: all 0.4s;
+    }
+    .pricing-card:hover { transform: translateY(-10px) scale(1.02); }
+
+    footer {
+      padding: 80px 20px 40px;
+      text-align: center;
+      position: relative;
+    }
+    footer::before {
+      content: ''; position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 60%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    }
+    .footer-links {
+      display: flex; justify-content: center; gap: 40px;
+      margin-bottom: 40px; flex-wrap: wrap;
+    }
+    .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    .footer-links a:hover { color: var(--secondary); }
+
+    /* ----------- MOBIL OPTIMIZASYON ----------- */
+    @media (max-width: 968px) {
+      nav { padding: 12px 20px; gap: 20px; }
+      .nav-links { gap: 20px; }
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        width: calc(100% - 40px);
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+      }
+      .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+      .hero h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
+      .btn-primary, .btn-secondary {
+        width: 100%; max-width: 280px;
+      }
+      .pricing-card {
+        padding: 40px 25px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <canvas class="bg-canvas" id="bgCanvas"></canvas>
-    <div class="bg-gradient-overlay"></div>
+  <canvas class="bg-canvas" id="bgCanvas"></canvas>
+  <div class="bg-gradient-overlay"></div>
 
-    <nav>
-        <div class="nav-logo">EIDICA</div>
-        <div class="nav-links">
-            <a href="#features">Features</a>
-            <a href="#showcase">Gallery</a>
-            <a href="#pricing">Pricing</a>
-        </div>
-    </nav>
+  <nav>
+    <div class="nav-logo">EIDICA</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
 
-    <section class="hero">
-        <div class="hero-content">
-            <span class="hero-badge">✨ Coming Soon to the App Store</span>
-            <h1>
-                <span class="gradient-text">Eidetic</span><br>Memory
-            </h1>
-            <p class="subtitle">
-                Capture the moment. Add the context. Never forget why it mattered.<br>
-                Keep your photos pure, your memories rich.
-            </p>
-            <div class="hero-cta">
-                <a href="#pricing" class="btn-primary"><span>Start Free Trial</span></a>
-                <a href="#features" class="btn-secondary">Learn More</a>
-            </div>
-        </div>
-    </section>
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-badge">✨ Coming Soon to the App Store</span>
+      <h1><span class="gradient-text">Eidetic</span><br>Memory</h1>
+      <p class="subtitle">Capture the moment. Add the context. Never forget why it mattered.</p>
+      <div class="hero-cta">
+        <a href="#pricing" class="btn-primary">Start Free Trial</a>
+        <a href="#features" class="btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
 
-    <section class="features" id="features">
-        <div class="section-title">
-            <h2>Why Eidica?</h2>
-            <p>Every feature designed to help you remember</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <span class="feature-icon">📸</span>
-                <h3>Instant Notes</h3>
-                <p>The moment you capture, the note appears. Write why it matters right away before the context fades.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">🗂️</span>
-                <h3>Smart Organization</h3>
-                <p>Organize your notes with custom folders. Lock any folder with Face ID for complete privacy.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">🗺️</span>
-                <h3>Map Integration</h3>
-                <p>See where you saved each note on Apple Maps. Search and filter by location effortlessly.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">🔒</span>
-                <h3>Privacy First</h3>
-                <p>No account required. No email needed. All data stays on your device. Optional iCloud backup available.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">⏰</span>
-                <h3>Smart Reminders</h3>
-                <p>Set reminders for important notes. Get notified at the perfect time to take action.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">🔍</span>
-                <h3>Powerful Search</h3>
-                <p>Find any note instantly by location, keyword, or date. Your memories are always one search away.</p>
-            </div>
-        </div>
-    </section>
+  <section class="features" id="features">
+    <div class="section-title">
+      <h2>Why Eidica?</h2>
+      <p>Every feature designed to help you remember</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card"><span class="feature-icon">📸</span><h3>Instant Notes</h3><p>Write why it matters instantly after capture.</p></div>
+      <div class="feature-card"><span class="feature-icon">🗂️</span><h3>Smart Organization</h3><p>Folders, Face ID locks and privacy built-in.</p></div>
+      <div class="feature-card"><span class="feature-icon">🗺️</span><h3>Map Integration</h3><p>See where you saved each note on Apple Maps.</p></div>
+    </div>
+  </section>
 
-    <section class="showcase" id="showcase">
-        <div class="section-title">
-            <h2>Experience the App</h2>
-            <p>Every detail crafted for your memory</p>
-        </div>
-        <div class="showcase-container">
-            <div class="screenshots-carousel">
-                <div class="screenshot-track">
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/1.png" alt="Home Screen">
-                    </div>
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/2.png" alt="Camera">
-                    </div>
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/3.png" alt="Note Detail">
-                    </div>
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/4.png" alt="Screen Recording">
-                    </div>
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/5.png" alt="Search">
-                    </div>
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/6.png" alt="Note Writing">
-                    </div>
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/7.png" alt="Map View">
-                    </div>
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/8.png" alt="Face ID Lock">
-                    </div>
-                    <div class="screenshot-item-3d">
-                        <img src="screenshots/9.png" alt="Folders">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <section class="pricing" id="pricing">
+    <div class="section-title"><h2>Pricing</h2><p>Start with 14 days free</p></div>
+    <div class="pricing-grid">
+      <div class="pricing-card"><h3>Monthly</h3><p>$12.99 / month</p></div>
+      <div class="pricing-card"><h3>Yearly</h3><p>$115.99 / year</p></div>
+    </div>
+  </section>
 
-    <section class="pricing" id="pricing">
-        <div class="section-title">
-            <h2>Pricing</h2>
-            <p>Start with 14 days free, then choose your plan</p>
-        </div>
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <span class="pricing-badge">14-Day Free Trial</span>
-                <h3>Monthly</h3>
-                <div class="pricing-price">$12.99</div>
-                <div class="pricing-period">/ month</div>
-                <ul class="pricing-features">
-                    <li>Unlimited notes</li>
-                    <li>5 media per note</li>
-                    <li>Face ID lock</li>
-                    <li>iCloud backup</li>
-                    <li>Map integration</li>
-                </ul>
-                <a href="#" class="btn-primary" style="width: 100%; text-align: center; display: block;"><span>Coming Soon</span></a>
-            </div>
-            <div class="pricing-card">
-                <span class="pricing-badge">14-Day Free Trial</span>
-                <h3>Yearly</h3>
-                <div class="pricing-price">$115.99</div>
-                <div class="pricing-period">/ year</div>
-                <ul class="pricing-features">
-                    <li>Unlimited notes</li>
-                    <li>5 media per note</li>
-                    <li>Face ID lock</li>
-                    <li>iCloud backup</li>
-                    <li>Map integration</li>
-                    <li><strong>Save 3 months!</strong></li>
-                </ul>
-                <a href="#" class="btn-primary" style="width: 100%; text-align: center; display: block;"><span>Coming Soon</span></a>
-            </div>
-        </div>
-    </section>
+  <footer id="contact">
+    <div class="footer-links">
+      <a href="https://becogit.github.io/eidica/privacy-policy.html" target="_blank">Privacy Policy</a>
+      <a href="https://becogit.github.io/eidica/terms-of-use.html" target="_blank">Terms of Use</a>
+    </div>
+    <div class="footer-email">Support: <a href="mailto:eidicaapp@gmail.com">eidicaapp@gmail.com</a></div>
+    <div class="copyright">© 2025 Eidica. All rights reserved.</div>
+  </footer>
 
-    <footer>
-        <div class="footer-links">
-            <a href="https://becogit.github.io/eidica/privacy-policy.html" target="_blank">Privacy Policy</a>
-            <a href="https://becogit.github.io/eidica/terms-of-use.html" target="_blank">Terms of Use</a>
-        </div>
-        <div class="footer-email">
-            Support: <a href="mailto:eidicaapp@gmail.com">eidicaapp@gmail.com</a>
-        </div>
-        <div class="copyright">
-            © 2025 Eidica. All rights reserved.
-        </div>
-    </footer>
-
-    <script>
-        // Animated Background Canvas
-        const canvas = document.getElementById('bgCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles = [];
-        const particleCount = 80;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() * 2;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 217, 255, 0.3)';
-                ctx.fill();
-            }
+  <script>
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resizeCanvas();
+    const particles = [];
+    for (let i=0;i<80;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,r:Math.random()*2});}
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>canvas.width)p.vx*=-1;if(p.y<0||p.y>canvas.height)p.vy*=-1;
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(0,217,255,0.3)';ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+    window.addEventListener('resize',resizeCanvas);
+    // Mouse particles only on desktop
+    if(!('ontouchstart' in window)){
+      document.addEventListener('mousemove',e=>{
+        if(Math.random()>0.95){
+          const particle=document.createElement('div');
+          particle.style.position='fixed';
+          particle.style.left=e.clientX+'px';
+          particle.style.top=e.clientY+'px';
+          particle.style.width='3px';particle.style.height='3px';
+          particle.style.background='#00d9ff';
+          particle.style.borderRadius='50%';
+          particle.style.opacity='0.8';
+          particle.style.transition='all 3s ease';
+          document.body.appendChild(particle);
+          setTimeout(()=>particle.remove(),3000);
         }
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-
-            // Connect particles
-            particles.forEach((p1, i) => {
-                particles.slice(i + 1).forEach(p2 => {
-                    const dx = p1.x - p2.x;
-                    const dy = p1.y - p2.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
-                        ctx.beginPath();
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.strokeStyle = `rgba(0, 217, 255, ${0.1 * (1 - distance / 150)})`;
-                        ctx.stroke();
-                    }
-                });
-            });
-
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Mouse particle effect
-        document.addEventListener('mousemove', (e) => {
-            if (Math.random() > 0.95) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = e.clientX + 'px';
-                particle.style.top = e.clientY + 'px';
-                document.body.appendChild(particle);
-
-                setTimeout(() => particle.remove(), 3000);
-            }
-        });
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
+      });
+    }
+  </script>
 </body>
 </html>
