@@ -127,12 +127,12 @@
 
         /* Hero Section */
         .hero {
-            min-height: 80vh;
+            min-height: 60vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            padding: 120px 20px 40px;
+            padding: 100px 20px 20px;
         }
 
         .hero-content {
@@ -265,13 +265,13 @@
 
         /* Features Section */
         .features {
-            padding: 60px 20px;
+            padding: 30px 20px;
             position: relative;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
         }
 
         .section-title h2 {
@@ -360,7 +360,7 @@
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
-            height: 700px;
+            height: 750px;
         }
 
         .screenshots-carousel {
@@ -374,8 +374,8 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            width: 300px;
-            height: 600px;
+            width: 375px;
+            height: 750px;
             transform-style: preserve-3d;
             animation: rotate3d 40s linear infinite;
         }
@@ -391,8 +391,8 @@
 
         .screenshot-item-3d {
             position: absolute;
-            width: 260px;
-            height: 563px;
+            width: 325px;
+            height: 704px;
             left: 50%;
             top: 50%;
             transform-origin: center;
@@ -400,6 +400,7 @@
             border-radius: 12px;
             overflow: visible;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .screenshot-item-3d img {
@@ -445,6 +446,76 @@
 
         .screenshot-item-3d:nth-child(9) {
             transform: translate(-50%, -50%) rotateY(320deg) translateZ(500px);
+        }
+
+        /* Image Popup Modal */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .image-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 20px;
+            box-shadow: 0 40px 100px rgba(0, 217, 255, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
         }
 
         /* Pricing */
@@ -607,13 +678,13 @@
             }
 
             .screenshot-track {
-                width: 220px;
-                height: 480px;
+                width: 275px;
+                height: 600px;
             }
 
             .screenshot-item-3d {
-                width: 220px;
-                height: 476px;
+                width: 275px;
+                height: 595px;
             }
         }
 
@@ -637,6 +708,11 @@
 
             .showcase-container {
                 height: 600px;
+            }
+
+            .modal-close {
+                top: 10px;
+                right: 10px;
             }
         }
 
@@ -740,37 +816,45 @@
         <div class="showcase-container">
             <div class="screenshots-carousel">
                 <div class="screenshot-track">
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/1.png')">
                         <img src="screenshots/1.png" alt="Home Screen">
                     </div>
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/2.png')">
                         <img src="screenshots/2.png" alt="Camera">
                     </div>
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/3.png')">
                         <img src="screenshots/3.png" alt="Note Detail">
                     </div>
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/4.png')">
                         <img src="screenshots/4.png" alt="Screen Recording">
                     </div>
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/5.png')">
                         <img src="screenshots/5.png" alt="Search">
                     </div>
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/6.png')">
                         <img src="screenshots/6.png" alt="Note Writing">
                     </div>
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/7.png')">
                         <img src="screenshots/7.png" alt="Map View">
                     </div>
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/8.png')">
                         <img src="screenshots/8.png" alt="Face ID Lock">
                     </div>
-                    <div class="screenshot-item-3d">
+                    <div class="screenshot-item-3d" onclick="openModal('screenshots/9.png')">
                         <img src="screenshots/9.png" alt="Folders">
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Full Resolution">
+        </div>
+    </div>
 
     <section class="pricing" id="pricing">
         <div class="section-title">
@@ -823,6 +907,28 @@
     </footer>
 
     <script>
+        // Image Modal Functions
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.classList.add('active');
+            modalImg.src = imageSrc;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         // Animated Background Canvas
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
