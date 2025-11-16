@@ -351,7 +351,7 @@
 
         /* Screenshot Carousel with flat rounded images */
         .showcase {
-            padding: 100px 20px;
+            padding: 120px 20px;
             overflow: hidden;
             position: relative;
         }
@@ -360,7 +360,7 @@
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
-            height: 750px;
+            height: 850px;
         }
 
         .screenshots-carousel {
@@ -413,39 +413,39 @@
         }
 
         .screenshot-item-3d:nth-child(1) {
-            transform: translate(-50%, -50%) rotateY(0deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(0deg) translateZ(650px);
         }
 
         .screenshot-item-3d:nth-child(2) {
-            transform: translate(-50%, -50%) rotateY(40deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(40deg) translateZ(650px);
         }
 
         .screenshot-item-3d:nth-child(3) {
-            transform: translate(-50%, -50%) rotateY(80deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(80deg) translateZ(650px);
         }
 
         .screenshot-item-3d:nth-child(4) {
-            transform: translate(-50%, -50%) rotateY(120deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(120deg) translateZ(650px);
         }
 
         .screenshot-item-3d:nth-child(5) {
-            transform: translate(-50%, -50%) rotateY(160deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(160deg) translateZ(650px);
         }
 
         .screenshot-item-3d:nth-child(6) {
-            transform: translate(-50%, -50%) rotateY(200deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(200deg) translateZ(650px);
         }
 
         .screenshot-item-3d:nth-child(7) {
-            transform: translate(-50%, -50%) rotateY(240deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(240deg) translateZ(650px);
         }
 
         .screenshot-item-3d:nth-child(8) {
-            transform: translate(-50%, -50%) rotateY(280deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(280deg) translateZ(650px);
         }
 
         .screenshot-item-3d:nth-child(9) {
-            transform: translate(-50%, -50%) rotateY(320deg) translateZ(500px);
+            transform: translate(-50%, -50%) rotateY(320deg) translateZ(650px);
         }
 
         /* Image Popup Modal */
@@ -674,7 +674,7 @@
             }
 
             .showcase-container {
-                height: 700px;
+                height: 750px;
             }
 
             .screenshot-track {
@@ -685,6 +685,18 @@
             .screenshot-item-3d {
                 width: 275px;
                 height: 595px;
+            }
+
+            .screenshot-item-3d:nth-child(1),
+            .screenshot-item-3d:nth-child(2),
+            .screenshot-item-3d:nth-child(3),
+            .screenshot-item-3d:nth-child(4),
+            .screenshot-item-3d:nth-child(5),
+            .screenshot-item-3d:nth-child(6),
+            .screenshot-item-3d:nth-child(7),
+            .screenshot-item-3d:nth-child(8),
+            .screenshot-item-3d:nth-child(9) {
+                transform: translate(-50%, -50%) rotateY(calc(var(--index) * 40deg)) translateZ(550px);
             }
         }
 
@@ -707,7 +719,7 @@
             }
 
             .showcase-container {
-                height: 600px;
+                height: 650px;
             }
 
             .modal-close {
