@@ -43,51 +43,47 @@
 </head>
 <body>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: October 24, 2025</p>
+    <p class="updated">Last updated: November 10, 2026</p>
     
     <p>This Privacy Policy describes how Eidica ("the App," "we," or "the Developer") handles user data and privacy.</p>
     
     <h2>1. Overview</h2>
-    <p>Eidica operates as a closed system. All notes, media, and location data remain private to the user and are stored only on the user's device or—optionally—within their personal iCloud account. The developer and third parties have no access to this data.</p>
+    <p>Eidica stores your notes, media, and optional note locations on your device. You can back them up to your own iCloud account. This policy also explains how Eidica handles trial verification, purchases, and crash diagnostics.</p>
     
     <h2>2. Data Storage</h2>
     <ul>
         <li><strong>Local Storage:</strong> All notes, media, and (if permitted) location data are stored locally on the user's iPhone or iPad.</li>
         <li><strong>iCloud Backup (optional):</strong> If the user enables iCloud backup, data are encrypted and saved exclusively to the user's own iCloud account through Apple's secure infrastructure.</li>
-        <li><strong>No External Servers:</strong> The App does not transmit or store any personal data, notes, or media on the developer's servers or other external systems.</li>
     </ul>
     
     <h2>3. Personal Information</h2>
     <ul>
-        <li>The App does not request or collect email addresses, names, contacts, or location history.</li>
+        <li>Eidica does not require a separate app account, name, email address, or contacts. If you email support, we receive the address and information you send so we can respond.</li>
         <li>Location information is stored only if the user explicitly allows it, and only with the related note on the user's own device or iCloud account.</li>
-        <li>The App does not share or transmit note or location data to the developer or any external servers.</li>
+        <li>The trial and purchase services do not receive your notes, media, or note location data.</li>
     </ul>
     
-    <h2>4. Subscription Data</h2>
-    <ul>
-        <li>Eidica operates on a subscription model and cannot be used without an active subscription.</li>
-        <li>Subscription management and payments are handled entirely by Apple via the App Store infrastructure.</li>
-        <li>Pricing varies by region according to App Store country settings.</li>
-        <li>The developer does not have access to users' payment or identity information.</li>
-    </ul>
+    <h2>4. Purchase Data</h2>
+    <p>Apple processes payments and manages subscriptions through the App Store. RevenueCat uses an app user identifier and App Store transaction information to verify purchases and restore access. The developer does not receive your payment card information.</p>
     
     <h2>5. Free Trial</h2>
-    <p>Each new user receives a 14-day free trial before billing begins. On day 15, the first paid subscription period automatically starts unless the user cancels through App Store settings during the trial.</p>
+    <p>The 7-day free trial starts on the first eligible app launch. It does not start a subscription or charge you when it ends. You can choose a paid plan from Eidica's purchase screen, available in Settings.</p>
+    <p>In versions that support cross-device trial verification, Eidica sends an Apple-signed app transaction and a randomly generated device identifier to its trial service hosted by Cloudflare. When available, it also sends Apple's device verification identifier to check that the transaction belongs to the device. If you started a trial in an earlier version, Eidica can send the locally saved start date to carry it over.</p>
+    <p>The trial database retains hashed account and device identifiers and the trial start date. These records preserve the original end date when you reinstall or change devices and enforce trial eligibility. The database does not retain the signed Apple transaction or Apple's device verification identifier.</p>
     
     <h2>6. Security</h2>
     <ul>
         <li>All local data are securely stored and encrypted where applicable.</li>
-        <li>The App contains no analytics, advertising, or tracking SDKs.</li>
-        <li>It functions offline except when using iCloud synchronization.</li>
+        <li>Eidica uses Firebase Crashlytics in release versions to collect crash reports and related diagnostics for troubleshooting.</li>
+        <li>Trial and purchase verification and iCloud synchronization use an internet connection.</li>
     </ul>
     
     <h2>7. User Rights</h2>
     <p>Users may:</p>
     <ul>
-        <li>Delete notes and data at any time.</li>
-        <li>Manage or delete iCloud backups directly from their Apple ID settings.</li>
-        <li>Remove the App, which permanently deletes all local data from the device.</li>
+        <li>Manage or delete iCloud backups in their Apple Account settings.</li>
+        <li>Remove the App to delete its local notes and media. iCloud backups, App Store purchase records, and trial records may remain.</li>
+        <li>Contact us at the address below with questions or requests about trial data, including deletion requests.</li>
     </ul>
     
     <h2>8. Policy Updates</h2>
