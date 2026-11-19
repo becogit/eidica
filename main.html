@@ -532,10 +532,10 @@
         }
 
         .pricing-grid {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 80px auto 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
             gap: 30px;
         }
 
@@ -544,7 +544,9 @@
             backdrop-filter: blur(20px);
             border: 2px solid rgba(255, 255, 255, 0.05);
             border-radius: 40px;
-            padding: 60px 40px;
+            padding: 48px 28px;
+            display: flex;
+            flex-direction: column;
             position: relative;
             overflow: hidden;
             transition: all 0.4s ease;
@@ -557,6 +559,83 @@
             background: linear-gradient(135deg, rgba(30, 64, 255, 0.1), rgba(157, 78, 221, 0.1));
             opacity: 0;
             transition: opacity 0.4s ease;
+        }
+
+        .pricing-card > * {
+            position: relative;
+        }
+
+        .pricing-card::before {
+            pointer-events: none;
+        }
+
+        .pricing-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 40px;
+            margin-bottom: 30px;
+        }
+
+        .pricing-card-header .pricing-badge {
+            margin-bottom: 0;
+        }
+
+        .lifetime-art {
+            width: 56px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .pricing-card .btn-primary {
+            display: block;
+            width: 100%;
+            max-width: none;
+            margin-top: auto;
+            padding: 18px 20px;
+            text-align: center;
+        }
+
+        .pricing-note {
+            max-width: 800px;
+            margin: 30px auto 0;
+            color: rgba(200, 200, 210, 0.9);
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .pricing-card--lifetime {
+            background: linear-gradient(135deg, #ffe55c, #ffd700 55%, #ffc700);
+            border-color: #ffe985;
+            color: #241b08;
+            box-shadow: 0 16px 48px rgba(255, 199, 0, 0.18);
+        }
+
+        .pricing-card--lifetime::before {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        .pricing-card.pricing-card--lifetime:hover {
+            border-color: #fff0a8;
+            box-shadow: 0 30px 80px rgba(255, 199, 0, 0.3);
+        }
+
+        .pricing-card--lifetime .pricing-badge,
+        .pricing-card--lifetime .btn-primary {
+            background: #241b08;
+            color: #fff3c4;
+            box-shadow: none;
+        }
+
+        .pricing-card--lifetime .btn-primary::before {
+            background: #49360f;
+        }
+
+        .pricing-card--lifetime .pricing-period,
+        .pricing-card--lifetime .pricing-features li,
+        .pricing-card--lifetime .pricing-features li::before {
+            color: #49360f;
         }
 
         .pricing-card:hover {
@@ -879,9 +958,11 @@
         </div>
         <div class="pricing-grid">
             <div class="pricing-card">
-                <span class="pricing-badge">Subscription</span>
+                <div class="pricing-card-header">
+                    <span class="pricing-badge">Subscription</span>
+                </div>
                 <h3>Monthly</h3>
-                <div class="pricing-price">$3.99</div>
+                <div class="pricing-price">$2.99</div>
                 <div class="pricing-period">/ month</div>
                 <ul class="pricing-features">
                     <li>Unlimited notes</li>
@@ -890,12 +971,14 @@
                     <li>iCloud backup</li>
                     <li>Map integration</li>
                 </ul>
-                <a href="https://apps.apple.com/app/id6754018702" class="btn-primary" style="width: 100%; text-align: center; display: block;"><span>View on the App Store</span></a>
+                <a href="https://apps.apple.com/app/id6754018702" class="btn-primary"><span>View on the App Store</span></a>
             </div>
             <div class="pricing-card">
-                <span class="pricing-badge">Subscription</span>
+                <div class="pricing-card-header">
+                    <span class="pricing-badge">Subscription</span>
+                </div>
                 <h3>Yearly</h3>
-                <div class="pricing-price">$34.99</div>
+                <div class="pricing-price">$19.99</div>
                 <div class="pricing-period">/ year</div>
                 <ul class="pricing-features">
                     <li>Unlimited notes</li>
@@ -903,11 +986,30 @@
                     <li>Face ID lock</li>
                     <li>iCloud backup</li>
                     <li>Map integration</li>
-                    <li><strong>Save 3 months!</strong></li>
+                    <li><strong>Save 44% vs. monthly</strong></li>
                 </ul>
-                <a href="https://apps.apple.com/app/id6754018702" class="btn-primary" style="width: 100%; text-align: center; display: block;"><span>View on the App Store</span></a>
+                <a href="https://apps.apple.com/app/id6754018702" class="btn-primary"><span>View on the App Store</span></a>
+            </div>
+            <div class="pricing-card pricing-card--lifetime">
+                <div class="pricing-card-header">
+                    <span class="pricing-badge">Full Access</span>
+                    <img class="lifetime-art" src="lifetime.svg" alt="" width="56" height="32" loading="lazy">
+                </div>
+                <h3>Lifetime</h3>
+                <div class="pricing-price">$29.99</div>
+                <div class="pricing-period">One-time purchase</div>
+                <ul class="pricing-features">
+                    <li>Unlimited notes</li>
+                    <li>5 media per note</li>
+                    <li>Face ID lock</li>
+                    <li>iCloud backup</li>
+                    <li>Map integration</li>
+                    <li><strong>Lifetime access. No renewals.</strong></li>
+                </ul>
+                <a href="https://apps.apple.com/app/id6754018702" class="btn-primary"><span>View on the App Store</span></a>
             </div>
         </div>
+        <p class="pricing-note">Prices shown in USD. Local prices are displayed in the App Store. Monthly and yearly subscriptions renew automatically unless canceled. Lifetime is a single payment.</p>
     </section>
 
     <footer>
